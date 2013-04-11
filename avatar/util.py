@@ -1,6 +1,7 @@
+import hashlib
+
 from django.conf import settings
 from django.core.cache import cache
-from django.utils.hashcompat import md5_constructor
 from django.utils.encoding import smart_str
 from django.template.defaultfilters import slugify
 
@@ -23,7 +24,8 @@ cached_funcs = set()
 def get_username(user):
     """
     Return username of a User instance.  If AVATAR_USERNAME_FIELD is set, then
-    return that field instead. """
+    return that field instead.
+    """
     if AVATAR_USERNAME_FIELD and hasattr(user, AVATAR_USERNAME_FIELD):
         return getattr(user, AVATAR_USERNAME_FIELD)
     elif hasattr(user, 'get_username'):
@@ -48,7 +50,7 @@ def get_cache_key(user_or_username, size, prefix):
         user_or_username = get_username(user_or_username)
     key = u'%s_%s_%s' % (prefix, user_or_username, size)
     return u'%s_%s' % (slugify(key)[:100],
-                       md5_constructor(smart_str(key)).hexdigest())
+                       hashlib.md5(smart_str(key)).hexdigest())
 
 
 def cache_result(func):
