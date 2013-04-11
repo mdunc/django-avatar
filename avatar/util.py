@@ -24,7 +24,7 @@ def get_username(user):
     """
     Return username of a User instance.  If AVATAR_USERNAME_FIELD is set, then
     return that field instead. """
-    if hasattr(user, AVATAR_USERNAME_FIELD):
+    if AVATAR_USERNAME_FIELD and hasattr(user, AVATAR_USERNAME_FIELD):
         return getattr(user, AVATAR_USERNAME_FIELD)
     elif hasattr(user, 'get_username'):
         return user.get_username()
